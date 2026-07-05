@@ -1,0 +1,114 @@
+/* ── About — editorial split layout ───────────────────────────────── */
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  align-items: start;
+}
+
+.about-aside {
+  position: sticky;
+  top: 7rem;
+}
+
+.about-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+}
+
+/* ── "Based in" globe instrument ──────────────────────────────────── */
+.location-globe {
+  margin-top: 2.5rem;
+}
+
+.location-globe-canvas {
+  height: clamp(14rem, 22vw, 19rem);
+  cursor: grab;
+}
+
+.location-globe-canvas:active {
+  cursor: grabbing;
+}
+
+.location-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.75rem;
+  font-size: var(--text-small);
+  color: var(--text-dim);
+}
+
+.location-coords {
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.about-body > p {
+  margin-bottom: 1.5rem;
+  color: var(--text-dim);
+}
+
+.about-lede {
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  line-height: 1.35;
+  color: var(--text) !important;
+}
+
+.about-lede em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  list-style: none;
+  padding: 0;
+  margin: 2.5rem 0 0;
+}
+
+.skills .badge:hover {
+  color: var(--accent);
+  border-color: var(--accent-line);
+}
+
+.coordinates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  margin: 3rem 0 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.coordinate dt {
+  font-size: var(--text-micro);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 0.35rem;
+}
+
+.coordinate dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-aside {
+    position: static;
+  }
+}

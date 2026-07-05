@@ -1,0 +1,81 @@
+/* ── Lab strip — one interactive instrument, kept slim ────────────── */
+.lab {
+  position: relative;
+  padding-block: clamp(3rem, 2rem + 4vw, 6rem);
+  border-top: 1px solid var(--line);
+}
+
+.lab-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.lab-hint {
+  margin-top: 0.75rem;
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  max-width: 18ch;
+}
+
+.lab-hint em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.lab-stage {
+  width: min(24rem, 42vw);
+  height: clamp(14rem, 24vw, 20rem);
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.lab-stage:active {
+  cursor: grabbing;
+}
+
+/* Static orbit diagram — the no-WebGL stand-in */
+.lab-fallback {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.lab-fallback span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid var(--accent-line);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.lab-fallback span:nth-child(1) {
+  width: 55%;
+  height: 55%;
+}
+
+.lab-fallback span:nth-child(2) {
+  width: 75%;
+  height: 40%;
+  transform: translate(-50%, -50%) rotate(28deg);
+}
+
+.lab-fallback span:nth-child(3) {
+  width: 90%;
+  height: 30%;
+  transform: translate(-50%, -50%) rotate(-18deg);
+}
+
+@media (max-width: 768px) {
+  .lab-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lab-stage {
+    width: 100%;
+    height: 14rem;
+  }
+}

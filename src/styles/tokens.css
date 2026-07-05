@@ -1,0 +1,38 @@
+/* ── Design tokens — Digital Observatory ─────────────────────────── */
+:root {
+  /* Color — one accent, everything else is atmosphere */
+  --bg-deep: #0a0b0f;
+  --bg-raised: #111318;
+  --bg-card: #14161c;
+  --line: rgba(237, 237, 239, 0.08);
+  --line-strong: rgba(237, 237, 239, 0.16);
+  --text: #ededef;
+  --text-dim: rgba(237, 237, 239, 0.64);
+  --text-faint: rgba(237, 237, 239, 0.4);
+  --accent: #35e0f2;
+  --accent-dim: rgba(53, 224, 242, 0.12);
+  --accent-line: rgba(53, 224, 242, 0.35);
+
+  /* Type — editorial display + clean grotesque */
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+
+  --text-hero: clamp(3.2rem, 1rem + 11vw, 9.5rem);
+  --text-h2: clamp(2.2rem, 1.2rem + 4.5vw, 4.75rem);
+  --text-h3: clamp(1.35rem, 1.1rem + 1.2vw, 2rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-small: 0.875rem;
+  --text-micro: 0.75rem;
+
+  /* Rhythm */
+  --space-section: clamp(6rem, 4rem + 8vw, 13rem);
+  --space-block: clamp(2.5rem, 2rem + 2.5vw, 4.5rem);
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --container: 82rem;
+
+  /* Motion */
+  --duration-fast: 180ms;
+  --duration-normal: 380ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}

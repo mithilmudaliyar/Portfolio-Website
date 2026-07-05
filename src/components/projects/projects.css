@@ -1,0 +1,387 @@
+/* ── Filters ──────────────────────────────────────────────────────── */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: var(--space-block);
+}
+
+.filter {
+  padding: 0.55rem 1.1rem;
+  font-size: var(--text-small);
+  color: var(--text-dim);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  transition:
+    color var(--duration-fast) var(--ease-smooth),
+    border-color var(--duration-fast) var(--ease-smooth),
+    background-color var(--duration-fast) var(--ease-smooth);
+}
+
+.filter sup {
+  margin-left: 0.4rem;
+  font-size: 0.65rem;
+  color: var(--accent);
+}
+
+.filter:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+.filter.is-active {
+  color: var(--accent);
+  border-color: var(--accent-line);
+  background: var(--accent-dim);
+}
+
+/* ── Editorial project grid — varied spans, never uniform ─────────── */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.project-card {
+  position: relative;
+  grid-column: span 6;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  /* Cursor-reactive tilt — vars written by useTilt, transform-only */
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition:
+    transform var(--duration-normal) var(--ease-out-expo),
+    border-color var(--duration-normal) var(--ease-smooth),
+    box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.project-card.is-tilting {
+  transition:
+    border-color var(--duration-normal) var(--ease-smooth),
+    box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+/* ── Animated gradient visual — per-project hues via --hue-a/--hue-b ── */
+.project-visual {
+  position: relative;
+  height: clamp(7rem, 14vw, 10rem);
+  margin: calc(-1 * clamp(1.5rem, 3vw, 2.25rem));
+  margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--hue-a) 55% 9%) 0%,
+    hsl(var(--hue-b) 45% 13%) 100%
+  );
+  border-bottom: 1px solid var(--line);
+}
+
+.project-visual-blob {
+  position: absolute;
+  width: 65%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(38px);
+  will-change: transform;
+}
+
+.project-visual-blob--a {
+  top: -35%;
+  left: -12%;
+  background: hsl(var(--hue-a) 80% 55% / 0.35);
+  animation: blob-drift-a 14s var(--ease-smooth) infinite alternate;
+}
+
+.project-visual-blob--b {
+  bottom: -45%;
+  right: -15%;
+  background: hsl(var(--hue-b) 85% 62% / 0.28);
+  animation: blob-drift-b 18s var(--ease-smooth) infinite alternate;
+}
+
+@keyframes blob-drift-a {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(22%, 14%) scale(1.18);
+  }
+}
+
+@keyframes blob-drift-b {
+  from {
+    transform: translate(0, 0) scale(1.1);
+  }
+  to {
+    transform: translate(-18%, -12%) scale(0.92);
+  }
+}
+
+/* Faint node-grid texture ties the visual to the observatory language */
+.project-visual-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(237, 237, 239, 0.16) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.35;
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 92%);
+  mask-image: linear-gradient(to bottom, black 0%, transparent 92%);
+}
+
+/* ── Cursor spotlight — follows --spot-x/--spot-y from useTilt ──────── */
+.project-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    420px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    rgba(53, 224, 242, 0.08),
+    transparent 65%
+  );
+  transition: opacity var(--duration-normal) var(--ease-smooth);
+}
+
+.project-card:hover .project-spotlight {
+  opacity: 1;
+}
+
+.project-card:nth-child(4n + 1) {
+  grid-column: span 7;
+}
+
+.project-card:nth-child(4n + 2) {
+  grid-column: span 5;
+}
+
+.project-card:nth-child(4n + 3) {
+  grid-column: span 5;
+}
+
+.project-card:nth-child(4n + 4) {
+  grid-column: span 7;
+}
+
+.project-card:hover {
+  border-color: var(--accent-line);
+  box-shadow: 0 24px 64px rgba(53, 224, 242, 0.07);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-visual-blob {
+    animation: none;
+  }
+}
+
+.project-num {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: rgba(237, 237, 239, 0.05);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.project-track {
+  font-size: var(--text-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.9rem;
+}
+
+.project-name {
+  font-size: var(--text-h3);
+  margin-bottom: 0.4rem;
+}
+
+.project-tagline {
+  font-family: var(--font-display);
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.project-problem,
+.project-outcome {
+  font-size: var(--text-small);
+  color: var(--text-dim);
+  margin-bottom: 0.75rem;
+}
+
+.project-outcome {
+  color: var(--text);
+}
+
+.project-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  list-style: none;
+  padding: 0;
+  margin: 1.1rem 0 1.25rem;
+}
+
+.project-links {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.project-links a {
+  font-family: var(--font-display);
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--text-dim);
+  border-bottom: 1px solid transparent;
+  transition:
+    color var(--duration-fast) var(--ease-smooth),
+    border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.project-links a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent-line);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .project-card,
+  .project-card:nth-child(4n + 1),
+  .project-card:nth-child(4n + 2),
+  .project-card:nth-child(4n + 3),
+  .project-card:nth-child(4n + 4) {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 700px) {
+  .project-card,
+  .project-card:nth-child(4n + 1),
+  .project-card:nth-child(4n + 2),
+  .project-card:nth-child(4n + 3),
+  .project-card:nth-child(4n + 4) {
+    grid-column: span 12;
+  }
+}
+
+/* ── "More projects" shelf — foundations as wide dotted cards ──────── */
+.more-projects {
+  margin-top: 2.5rem;
+}
+
+.more-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.1rem 1.5rem;
+  font-family: var(--font-display);
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--text-dim);
+  border: 1px dashed var(--line-strong);
+  border-radius: 14px;
+  transition:
+    color var(--duration-fast) var(--ease-smooth),
+    border-color var(--duration-fast) var(--ease-smooth),
+    background-color var(--duration-fast) var(--ease-smooth);
+}
+
+.more-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent-line);
+  background: var(--accent-dim);
+}
+
+.more-toggle-icon {
+  display: inline-block;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--accent);
+  transition: transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.more-toggle-icon.is-open {
+  transform: rotate(45deg);
+}
+
+.more-toggle-meta {
+  margin-left: auto;
+  font-family: var(--font-body);
+  font-size: var(--text-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.more-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Long full-width cards — the pixel-canvas texture lives underneath */
+.more-card {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 2rem;
+  margin-top: 1rem;
+  padding: 1.4rem clamp(1.25rem, 3vw, 2rem);
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  transition:
+    border-color var(--duration-normal) var(--ease-smooth),
+    box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.more-card:hover {
+  border-color: var(--accent-line);
+  box-shadow: 0 18px 48px rgba(53, 224, 242, 0.06);
+}
+
+/* Content sits above the absolutely-positioned pixel canvas */
+.more-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.more-card > pixel-canvas {
+  z-index: 0;
+}
+
+.more-card-main {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.more-card .project-track {
+  margin-bottom: 0.35rem;
+}
+
+.more-card-name {
+  font-size: 1.3rem;
+  margin-bottom: 0.2rem;
+}
+
+.more-card-tagline {
+  font-size: var(--text-small);
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.more-card .project-stack {
+  margin: 0;
+}

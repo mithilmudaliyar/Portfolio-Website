@@ -1,0 +1,256 @@
+/* ── Hero ─────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Translucent — the persistent scene canvas shows through */
+  background: radial-gradient(120% 90% at 70% 20%, rgba(17, 19, 24, 0.35) 0%, transparent 60%);
+  /* Pass events through empty areas so constellation nodes stay
+     hoverable; interactive content re-enables below. */
+  pointer-events: none;
+}
+
+.hero-inner,
+.hero-scroll-cue {
+  pointer-events: auto;
+}
+
+/* ── Hero content — asymmetric, editorial ─────────────────────────── */
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  padding-top: 5rem;
+}
+
+.hero-kicker {
+  color: var(--accent);
+  margin-bottom: 1.25rem;
+}
+
+.hero-title {
+  font-size: var(--text-hero);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 0.96;
+  text-transform: uppercase;
+}
+
+.hero-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.hero-line {
+  display: block;
+  overflow: hidden;
+}
+
+.hero-line--offset {
+  margin-left: clamp(1.5rem, 12vw, 12rem);
+}
+
+.hero-line-inner {
+  display: inline-block;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: clamp(2rem, 5vh, 4rem);
+}
+
+.hero-tagline {
+  max-width: 34rem;
+  color: var(--text-dim);
+  font-size: var(--text-base);
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+/* Entry choreography — gated on .is-ready, disabled for reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-line-inner {
+    transform: translateY(112%);
+    transition: transform 1.1s var(--ease-out-expo);
+  }
+
+  .hero-line:nth-child(2) .hero-line-inner {
+    transition-delay: 0.1s;
+  }
+
+  .hero-kicker,
+  .hero-meta,
+  .hero-scroll-cue {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.9s var(--ease-smooth) 0.45s,
+      transform 0.9s var(--ease-out-expo) 0.45s;
+  }
+
+  .hero.is-ready .hero-line-inner {
+    transform: none;
+  }
+
+  .hero.is-ready .hero-kicker,
+  .hero.is-ready .hero-meta,
+  .hero.is-ready .hero-scroll-cue {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Scroll cue ───────────────────────────────────────────────────── */
+.hero-scroll-cue {
+  position: absolute;
+  bottom: 2rem;
+  right: var(--gutter);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--text-micro);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  writing-mode: vertical-rl;
+}
+
+.hero-scroll-line {
+  width: 1px;
+  height: 3.5rem;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-scroll-line {
+    animation: scroll-pulse 2.2s var(--ease-smooth) infinite;
+  }
+}
+
+@keyframes scroll-pulse {
+  0%,
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(0.55);
+    opacity: 0.5;
+  }
+}
+
+/* ── 3D node tooltip ──────────────────────────────────────────────── */
+.node-label-wrap {
+  pointer-events: none;
+}
+
+.node-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.55rem 0.85rem;
+  background: rgba(17, 19, 24, 0.88);
+  border: 1px solid var(--accent-line);
+  border-radius: 8px;
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+  transform: translateY(-1.6rem);
+}
+
+.node-label strong {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.node-label span {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ── Intro overlay ────────────────────────────────────────────────── */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9800;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background: var(--bg-deep);
+  transition: opacity 0.45s var(--ease-smooth);
+}
+
+.intro.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-mark {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.intro-mark em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.intro-bar {
+  width: min(16rem, 60vw);
+  height: 1px;
+  background: var(--line-strong);
+  overflow: hidden;
+}
+
+/* Transform is driven inline by Intro from the real load percentage */
+.intro-bar span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transform: translateX(-100%);
+}
+
+.intro-skip {
+  position: absolute;
+  bottom: 2.5rem;
+  font-size: var(--text-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding: 0.5rem 1rem;
+  transition: color var(--duration-fast) var(--ease-smooth);
+}
+
+.intro-skip:hover,
+.intro-skip:focus-visible {
+  color: var(--accent);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero-line--offset {
+    margin-left: 1.25rem;
+  }
+
+  .hero-scroll-cue {
+    display: none;
+  }
+}

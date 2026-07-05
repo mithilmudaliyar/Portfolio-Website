@@ -1,0 +1,101 @@
+/* ── Contact — the bold close ─────────────────────────────────────── */
+.contact {
+  background: radial-gradient(90% 70% at 50% 100%, rgba(53, 224, 242, 0.05) 0%, transparent 60%);
+}
+
+.contact-headline {
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  max-width: none;
+  margin-bottom: 1.75rem;
+}
+
+.contact-headline em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.contact-sub {
+  color: var(--text-dim);
+  max-width: 36rem;
+  margin-bottom: 2.5rem;
+}
+
+.contact-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-bottom: 3.5rem;
+}
+
+.contact-email {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 0.2rem;
+  transition:
+    color var(--duration-fast) var(--ease-smooth),
+    border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.contact-email:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.contact-email-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.contact-copy {
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  transition:
+    color var(--duration-fast) var(--ease-smooth),
+    border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.contact-copy:hover {
+  color: var(--accent);
+  border-color: var(--accent-line);
+}
+
+/* ── Copy toast ───────────────────────────────────────────────────── */
+.copy-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  z-index: 9600;
+  padding: 0.7rem 1.4rem;
+  background: var(--bg-raised);
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  font-size: var(--text-small);
+  color: var(--text);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  transition:
+    opacity var(--duration-normal) var(--ease-smooth),
+    transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.copy-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
