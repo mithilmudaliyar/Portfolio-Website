@@ -52,6 +52,12 @@ export default function About() {
             prompt and context engineering, retrieval-augmented pipelines — while keeping
             every interface I ship fast, accessible and worth looking at.
           </p>
+          <p data-reveal>
+            I also have a soft spot for IoT and embedded systems — there's something
+            satisfying about software that has to answer to real hardware. It's not where
+            my day-to-day work lives yet, but it's the kind of project I'd jump at given
+            the chance.
+          </p>
 
           <ul className="skills" aria-label="Core skills" data-reveal>
             {SKILLS.map((skill) => (

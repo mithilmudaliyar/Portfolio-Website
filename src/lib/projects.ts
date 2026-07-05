@@ -154,6 +154,7 @@ export const projects: Project[] = [
 
 export const SOCIAL = {
   github: GH,
+  linkedin: 'https://www.linkedin.com/in/mithil-mudaliyar/',
   email: 'mithilmudaliyar@gmail.com',
   resume: '/resume.pdf',
 }

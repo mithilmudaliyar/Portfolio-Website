@@ -10,6 +10,10 @@ export default function Footer() {
             GitHub ↗
           </a>
           {'  ·  '}
+          <a href={SOCIAL.linkedin} target="_blank" rel="noreferrer">
+            LinkedIn ↗
+          </a>
+          {'  ·  '}
           <a href={`mailto:${SOCIAL.email}`}>{SOCIAL.email}</a>
         </p>
       </div>

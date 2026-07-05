@@ -44,8 +44,8 @@ export default function Contact() {
         </p>
 
         <p className="contact-sub" data-reveal>
-          Open to internships, junior roles and collaborations — especially anything that
-          mixes machine learning with a great interface.
+          Open to full-time roles and collaborations — especially anything that mixes
+          machine learning with a great interface.
         </p>
 
         <div className="contact-ctas" data-reveal>
@@ -54,6 +54,9 @@ export default function Contact() {
           </a>
           <a className="btn btn--ghost" href={SOCIAL.github} target="_blank" rel="noopener noreferrer">
             GitHub ↗
+          </a>
+          <a className="btn btn--ghost" href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer">
+            LinkedIn ↗
           </a>
           <a className="btn btn--ghost" href={SOCIAL.resume} download>
             Resume ↓
