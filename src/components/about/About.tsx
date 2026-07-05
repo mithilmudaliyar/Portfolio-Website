@@ -48,9 +48,9 @@ export default function About() {
             fundamentals — game loops, state, timers — before moving them to the web.
           </p>
           <p data-reveal>
-            Right now I'm deepening the AI side of my work — vision pipelines with Gemini,
-            better training discipline, cleaner data — while keeping every interface I ship
-            fast, accessible and worth looking at.
+            Right now I'm deepening the AI side of my work — LLMs and agentic workflows,
+            prompt and context engineering, retrieval-augmented pipelines — while keeping
+            every interface I ship fast, accessible and worth looking at.
           </p>
 
           <ul className="skills" aria-label="Core skills" data-reveal>

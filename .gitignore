@@ -4,3 +4,7 @@ dist-ssr
 *.local
 .DS_Store
 *.tsbuildinfo
+
+# Real resume has personal contact details — never tracked in this
+# public repo. public/resume.pdf stays local-only for `npm run dev`.
+public/resume.pdf
