@@ -21,7 +21,7 @@
 .studies-rail-fill {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, var(--accent), rgba(53, 224, 242, 0.25));
+  background: var(--accent);
   transform-origin: top;
   transform: scaleY(0);
   will-change: transform;
@@ -51,8 +51,10 @@
   display: block;
   font-family: var(--font-display);
   font-size: clamp(3rem, 6vw, 5rem);
-  font-weight: 700;
-  color: rgba(53, 224, 242, 0.14);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 144;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(166, 60, 17, 0.55);
   line-height: 1;
   margin-bottom: 0.75rem;
 }
@@ -78,9 +80,9 @@
 }
 
 .study-block h4 {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--text-micro);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
@@ -110,7 +112,7 @@
   padding: 1.25rem 1.5rem;
   background: var(--accent-dim);
   border-left: 2px solid var(--accent);
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 2px 2px 0;
   color: var(--text-dim);
 }
 

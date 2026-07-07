@@ -5,32 +5,16 @@ import './lab.css'
 
 const LabScene = lazy(() => import('./LabScene'))
 
-function supportsWebGL(): boolean {
-  try {
-    const canvas = document.createElement('canvas')
-    return Boolean(
-      window.WebGLRenderingContext &&
-        (canvas.getContext('webgl2') || canvas.getContext('webgl')),
-    )
-  } catch {
-    return false
-  }
-}
-
 /**
  * Mini interactive strip between Work and Case Studies: one drag-to-inspect
- * 3D instrument. Mounts on approach, renders only while visible; without
- * WebGL a static CSS orbit diagram stands in.
+ * typographic instrument, drawn with canvas 2D (no WebGL). Mounts on
+ * approach, animates only while visible; a static CSS orbit diagram stands
+ * in until it mounts.
  */
 export default function Lab() {
   const reduced = useReducedMotion()
   const { ref, inView } = useInView<HTMLElement>()
   const [mounted, setMounted] = useState(false)
-  const [hasWebGL, setHasWebGL] = useState(true)
-
-  useEffect(() => {
-    setHasWebGL(supportsWebGL())
-  }, [])
 
   useEffect(() => {
     if (inView) setMounted(true)
@@ -46,12 +30,10 @@ export default function Lab() {
           </p>
         </div>
         <div className="lab-stage" aria-hidden="true">
-          {hasWebGL ? (
-            mounted && (
-              <Suspense fallback={null}>
-                <LabScene active={inView} animate={!reduced} />
-              </Suspense>
-            )
+          {mounted ? (
+            <Suspense fallback={null}>
+              <LabScene active={inView} animate={!reduced} />
+            </Suspense>
           ) : (
             <div className="lab-fallback">
               <span />

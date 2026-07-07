@@ -2,9 +2,8 @@ import { useMagnetic } from '../../hooks/useMagnetic'
 import './hero.css'
 
 /**
- * Hero content only — the 3D constellation behind it lives in the
- * page-level SceneBackground (region 0 of the flythrough). Text renders
- * immediately, so LCP never waits on WebGL.
+ * Hero content — pure typography on paper. Text renders immediately,
+ * so LCP never waits on anything.
  */
 export default function Hero({ ready }: { ready: boolean }) {
   const magnetPrimary = useMagnetic<HTMLAnchorElement>()

@@ -27,6 +27,9 @@ export default function Contact() {
 
   return (
     <section id="contact" className="section contact" aria-labelledby="contact-heading">
+      <span className="section-ghost" aria-hidden="true" data-parallax="0.16">
+        04
+      </span>
       <div className="container">
         <div className="section-head">
           <span className="section-index" data-reveal>
@@ -35,6 +38,7 @@ export default function Contact() {
           <h2 className="section-title" data-split>
             Contact
           </h2>
+          <span className="head-rule" aria-hidden="true" data-reveal-clip />
         </div>
 
         <p id="contact-heading" className="contact-headline" data-reveal>

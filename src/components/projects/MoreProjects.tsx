@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { TRACK_LABELS, type Project } from '../../lib/projects'
-import { PixelCanvas } from '../ui/PixelCanvas'
 
 interface MoreProjectsProps {
   items: Project[]
@@ -9,9 +8,7 @@ interface MoreProjectsProps {
 
 /**
  * Collapsible "More projects" shelf below the main grid — the foundations
- * projects live here as long full-width cards. These wide cards (and only
- * these) carry the 21st.dev pixel-canvas dotted texture: it appears as each
- * card scrolls into view and intensifies on hover/focus.
+ * projects live here as long full-width ruled cards.
  */
 export default function MoreProjects({ items }: MoreProjectsProps) {
   const [open, setOpen] = useState(false)
@@ -46,8 +43,6 @@ export default function MoreProjects({ items }: MoreProjectsProps) {
           >
             {items.map((project) => (
               <li key={project.id} className="more-card" id={`project-${project.id}`}>
-                {/* Dotted texture — reacts to the card's hover/focus itself */}
-                <PixelCanvas gap={12} speed={30} />
                 <div className="more-card-main">
                   <p className="project-track">{project.year}</p>
                   <h3 className="more-card-name">{project.name}</h3>

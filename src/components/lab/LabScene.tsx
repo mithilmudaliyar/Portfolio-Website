@@ -1,162 +1,30 @@
-import { useEffect, useMemo, useRef } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import * as THREE from 'three'
-
-const ACCENT = '#35e0f2'
-
-interface DragState {
-  active: boolean
-  vx: number
-  vy: number
-}
+import { useEffect, useRef } from 'react'
 
 /**
- * Drag handling lives on the CANVAS + DOCUMENT — not on the 3D object — so
- * pressing anywhere on the stage and dragging off the graph keeps rotating
- * until release (R3F object events stop firing the moment the cursor
- * leaves the mesh, which is why the old astrolabe drag broke). Same
- * press-and-hold pattern as the D3 globe.
+ * The lab instrument, redrawn for the paper-and-ink skin: the stack
+ * mapped as a typographic constellation. Each technology name sits on a
+ * slowly turning 3D-projected sphere, rendered with plain canvas 2D —
+ * ink type, hairline ticks, a clay core. Drag to throw it with inertia.
+ * No WebGL, dpr capped at 1.5, draws only while `active`.
  */
-function useCanvasDrag(drag: React.RefObject<DragState>) {
-  const gl = useThree((state) => state.gl)
+const STACK = [
+  'Python',
+  'ML',
+  'CV',
+  'NLP',
+  'React',
+  'TypeScript',
+  'Node',
+  'SQL',
+  'Java',
+  'Git',
+]
 
-  useEffect(() => {
-    const el = gl.domElement
-    let lastX = 0
-    let lastY = 0
-
-    const onPointerMove = (event: PointerEvent) => {
-      if (!drag.current.active) return
-      drag.current.vx = (event.clientX - lastX) * 0.005
-      drag.current.vy = (event.clientY - lastY) * 0.004
-      lastX = event.clientX
-      lastY = event.clientY
-    }
-    const onPointerUp = () => {
-      drag.current.active = false
-    }
-    const onPointerDown = (event: PointerEvent) => {
-      drag.current.active = true
-      lastX = event.clientX
-      lastY = event.clientY
-    }
-
-    el.addEventListener('pointerdown', onPointerDown)
-    document.addEventListener('pointermove', onPointerMove)
-    document.addEventListener('pointerup', onPointerUp)
-    document.addEventListener('pointercancel', onPointerUp)
-    return () => {
-      el.removeEventListener('pointerdown', onPointerDown)
-      document.removeEventListener('pointermove', onPointerMove)
-      document.removeEventListener('pointerup', onPointerUp)
-      document.removeEventListener('pointercancel', onPointerUp)
-    }
-  }, [gl, drag])
-}
-
-const NODE_COUNT = 10 // Python · ML · CV · NLP · React · TS · Node · SQL · Java · Git
-
-/**
- * The lab instrument: my stack mapped as a constellation — a cyan core
- * (the portfolio itself) linked to ten orbiting nodes, spokes plus a few
- * chords between neighbours. Idle motion is a slow spin with per-node
- * breathing; dragging throws the whole graph with inertia.
- */
-function StackGraph({ animate, drag }: { animate: boolean; drag: React.RefObject<DragState> }) {
-  const assembly = useRef<THREE.Group>(null)
-  const nodeRefs = useRef<(THREE.Mesh | null)[]>([])
-
-  const { nodes, edges } = useMemo(() => {
-    // Fibonacci-distributed shell with a little radius jitter, so the
-    // graph reads organic rather than geodesic.
-    const golden = Math.PI * (3 - Math.sqrt(5))
-    const nodes = Array.from({ length: NODE_COUNT }, (_, i) => {
-      const y = 1 - (i / (NODE_COUNT - 1)) * 2
-      const ring = Math.sqrt(1 - y * y)
-      const theta = golden * i
-      const radius = 1.45 + ((i * 7) % 3) * 0.14
-      return new THREE.Vector3(
-        Math.cos(theta) * ring,
-        y,
-        Math.sin(theta) * ring,
-      ).multiplyScalar(radius)
-    })
-
-    // Spokes from the core to every node, plus chords between neighbours.
-    const positions: number[] = []
-    for (const node of nodes) positions.push(0, 0, 0, node.x, node.y, node.z)
-    for (let i = 0; i < NODE_COUNT; i++) {
-      const a = nodes[i]
-      const b = nodes[(i + 3) % NODE_COUNT]
-      positions.push(a.x, a.y, a.z, b.x, b.y, b.z)
-    }
-    return { nodes, edges: new Float32Array(positions) }
-  }, [])
-
-  useFrame((state, delta) => {
-    if (!assembly.current) return
-    const d = drag.current
-    assembly.current.rotation.y += d.vx
-    assembly.current.rotation.x += d.vy
-    d.vx *= d.active ? 0.82 : 0.95
-    d.vy *= d.active ? 0.82 : 0.95
-    if (animate && !d.active) {
-      assembly.current.rotation.y += delta * 0.18
-    }
-    if (animate) {
-      const t = state.clock.elapsedTime
-      nodeRefs.current.forEach((mesh, i) => {
-        if (mesh) mesh.scale.setScalar(1 + 0.16 * Math.sin(t * 1.6 + i * 1.9))
-      })
-    }
-  })
-
-  return (
-    <group ref={assembly} rotation={[0.3, 0.6, 0]}>
-      {/* Core — the portfolio node */}
-      <mesh>
-        <icosahedronGeometry args={[0.3, 1]} />
-        <meshBasicMaterial color={ACCENT} wireframe transparent opacity={0.85} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[0.1, 12, 12]} />
-        <meshBasicMaterial color={ACCENT} />
-      </mesh>
-
-      {/* Stack nodes — every third one cyan, the rest dim-white */}
-      {nodes.map((position, i) => (
-        <mesh
-          key={i}
-          position={position}
-          ref={(el) => {
-            nodeRefs.current[i] = el
-          }}
-        >
-          <sphereGeometry args={[i % 3 === 0 ? 0.09 : 0.065, 12, 12]} />
-          <meshBasicMaterial
-            color={i % 3 === 0 ? ACCENT : '#ededef'}
-            transparent
-            opacity={i % 3 === 0 ? 0.95 : 0.7}
-          />
-        </mesh>
-      ))}
-
-      {/* Edges */}
-      <lineSegments>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[edges, 3]} />
-        </bufferGeometry>
-        <lineBasicMaterial color={ACCENT} transparent opacity={0.28} />
-      </lineSegments>
-    </group>
-  )
-}
-
-function Instrument({ animate }: { animate: boolean }) {
-  const drag = useRef<DragState>({ active: false, vx: 0, vy: 0 })
-  useCanvasDrag(drag)
-  return <StackGraph animate={animate} drag={drag} />
-}
+const INK = '240, 228, 214' // warm smoke — matches --text on the ember theme
+const CLAY = '#e26a38' // --accent ember
+const RADIUS_JITTER = [1, 1.14, 1.06, 1.2, 1.02, 1.16, 1.08, 1.1, 1.04, 1.18]
+const IDLE_SPEED = 0.0032 // radians per frame at 60fps
+const DRAG_DAMPING = 0.94
 
 interface LabSceneProps {
   active: boolean
@@ -164,14 +32,166 @@ interface LabSceneProps {
 }
 
 export default function LabScene({ active, animate }: LabSceneProps) {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const activeRef = useRef(active)
+  const animateRef = useRef(animate)
+
+  useEffect(() => {
+    activeRef.current = active
+    animateRef.current = animate
+  }, [active, animate])
+
+  useEffect(() => {
+    const wrap = wrapRef.current
+    const canvas = canvasRef.current
+    if (!wrap || !canvas) return
+    const context = canvas.getContext('2d')
+    if (!context) return
+
+    let width = 0
+    let height = 0
+
+    // Fibonacci-distributed unit sphere with a little radius jitter, so
+    // the constellation reads organic rather than geodesic.
+    const golden = Math.PI * (3 - Math.sqrt(5))
+    const points = STACK.map((label, i) => {
+      const y = 1 - (i / (STACK.length - 1)) * 2
+      const ring = Math.sqrt(1 - y * y)
+      const theta = golden * i
+      const r = RADIUS_JITTER[i]
+      return { label, x: Math.cos(theta) * ring * r, y: y * r, z: Math.sin(theta) * ring * r }
+    })
+
+    let rotY = 0.6
+    let rotX = 0.25
+    const drag = { active: false, vx: 0, vy: 0, lastX: 0, lastY: 0 }
+
+    const render = () => {
+      context.clearRect(0, 0, width, height)
+      const cx = width / 2
+      const cy = height / 2
+      const scale = Math.min(width, height) * 0.36
+      const cosY = Math.cos(rotY)
+      const sinY = Math.sin(rotY)
+      const cosX = Math.cos(rotX)
+      const sinX = Math.sin(rotX)
+
+      // Clay core — the portfolio itself
+      context.beginPath()
+      context.arc(cx, cy, 4, 0, Math.PI * 2)
+      context.fillStyle = CLAY
+      context.fill()
+      context.beginPath()
+      context.arc(cx, cy, 9, 0, Math.PI * 2)
+      context.strokeStyle = `rgba(226, 106, 56, 0.4)`
+      context.lineWidth = 1
+      context.stroke()
+
+      const projected = points
+        .map((p) => {
+          // rotate around Y, then X
+          const x1 = p.x * cosY + p.z * sinY
+          const z1 = -p.x * sinY + p.z * cosY
+          const y1 = p.y * cosX - z1 * sinX
+          const z2 = p.y * sinX + z1 * cosX
+          const depth = (z2 + 1.4) / 2.4 // 0 (far) → 1 (near)
+          return { label: p.label, sx: cx + x1 * scale, sy: cy + y1 * scale, depth }
+        })
+        .sort((a, b) => a.depth - b.depth)
+
+      for (const p of projected) {
+        const alpha = 0.25 + p.depth * 0.75
+
+        // Hairline from the core — fades with depth
+        context.beginPath()
+        context.moveTo(cx, cy)
+        context.lineTo(p.sx, p.sy)
+        context.strokeStyle = `rgba(${INK}, ${0.06 + p.depth * 0.12})`
+        context.lineWidth = 1
+        context.stroke()
+
+        // Tick + label
+        context.beginPath()
+        context.arc(p.sx, p.sy, 1.5 + p.depth * 1.5, 0, Math.PI * 2)
+        context.fillStyle = `rgba(${INK}, ${alpha})`
+        context.fill()
+
+        const size = 11 + p.depth * 5
+        context.font = `500 ${size}px 'Instrument Sans', system-ui, sans-serif`
+        context.fillStyle = `rgba(${INK}, ${alpha})`
+        context.fillText(p.label, p.sx + 7, p.sy + 4)
+      }
+    }
+
+    const resize = () => {
+      const rect = wrap.getBoundingClientRect()
+      if (rect.width === 0 || rect.height === 0) return
+      width = rect.width
+      height = rect.height
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+      canvas.width = Math.floor(width * dpr)
+      canvas.height = Math.floor(height * dpr)
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      context.setTransform(dpr, 0, 0, dpr, 0, 0)
+      render()
+    }
+
+    resize()
+    const resizeObserver = new ResizeObserver(resize)
+    resizeObserver.observe(wrap)
+
+    let rafId = 0
+    const tick = () => {
+      rafId = requestAnimationFrame(tick)
+      if (!activeRef.current) return
+      rotY += drag.vx
+      rotX += drag.vy
+      drag.vx *= DRAG_DAMPING
+      drag.vy *= DRAG_DAMPING
+      if (animateRef.current && !drag.active) rotY += IDLE_SPEED
+      rotX = Math.max(-1.2, Math.min(1.2, rotX))
+      render()
+    }
+    rafId = requestAnimationFrame(tick)
+
+    // Press-and-hold drag: down on the canvas, move/up on the document,
+    // so leaving the stage mid-drag keeps rotating until release.
+    const onPointerDown = (event: PointerEvent) => {
+      drag.active = true
+      drag.lastX = event.clientX
+      drag.lastY = event.clientY
+    }
+    const onPointerMove = (event: PointerEvent) => {
+      if (!drag.active) return
+      drag.vx = (event.clientX - drag.lastX) * 0.005
+      drag.vy = (event.clientY - drag.lastY) * 0.004
+      drag.lastX = event.clientX
+      drag.lastY = event.clientY
+    }
+    const onPointerUp = () => {
+      drag.active = false
+    }
+
+    canvas.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('pointermove', onPointerMove)
+    document.addEventListener('pointerup', onPointerUp)
+    document.addEventListener('pointercancel', onPointerUp)
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      resizeObserver.disconnect()
+      canvas.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('pointermove', onPointerMove)
+      document.removeEventListener('pointerup', onPointerUp)
+      document.removeEventListener('pointercancel', onPointerUp)
+    }
+  }, [])
+
   return (
-    <Canvas
-      frameloop={active ? 'always' : 'never'}
-      dpr={[1, 1.5]}
-      camera={{ position: [0, 0, 5], fov: 45 }}
-      gl={{ antialias: false, alpha: true }}
-    >
-      <Instrument animate={animate} />
-    </Canvas>
+    <div ref={wrapRef} style={{ width: '100%', height: '100%' }}>
+      <canvas ref={canvasRef} style={{ display: 'block', touchAction: 'none' }} />
+    </div>
   )
 }

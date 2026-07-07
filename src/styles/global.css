@@ -20,15 +20,31 @@ body {
   overflow-x: hidden;
 }
 
-/* Film grain — pure CSS, zero JS cost */
+/* Blueprint margin rules — faint verticals at the container edges, the
+   page's drafting structure. Static, zero JS. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  --edge: calc((100% - min(var(--container), 100% - var(--gutter) * 2)) / 2);
+  background:
+    linear-gradient(var(--line), var(--line)) left var(--edge) top / 1px 100% no-repeat,
+    linear-gradient(var(--line), var(--line)) right var(--edge) top / 1px 100% no-repeat;
+}
+
+/* Paper grain — pure CSS, zero JS cost. Multiply keeps it reading as
+   tooth in the paper stock rather than a film over the type. */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 9000;
   pointer-events: none;
-  opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.94 0 0 0 0 0.92 0 0 0 0 0.86 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 img,
@@ -42,9 +58,10 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 500;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-weight: 550;
+  font-variation-settings: 'opsz' 100;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
@@ -83,11 +100,11 @@ button {
   left: 0.75rem;
   z-index: 10000;
   padding: 0.6rem 1rem;
-  background: var(--accent);
+  background: var(--text);
   color: var(--bg-deep);
   font-weight: 600;
   font-size: var(--text-small);
-  border-radius: 4px;
+  border-radius: 2px;
   transform: translateY(-200%);
   transition: transform var(--duration-fast) var(--ease-smooth);
 }
@@ -128,22 +145,64 @@ button {
 .section {
   padding-block: var(--space-section);
   position: relative;
+  /* clip (not hidden) so the bleeding ghost numeral never widens the
+     page while sticky children keep working */
+  overflow-x: clip;
 }
 
 .section + .section {
   border-top: 1px solid var(--line);
 }
 
+/* Content rides above the ghost layer */
+.section > .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Oversized ghost numeral behind each section — hairline-stroked
+   Fraunces, parallaxed on scroll via [data-parallax] in useReveal */
+.section-ghost {
+  position: absolute;
+  top: 3rem;
+  right: -1rem;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 144;
+  font-size: clamp(11rem, 26vw, 24rem);
+  font-weight: 500;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(240, 224, 208, 0.1);
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
 .section-head {
+  position: relative;
   display: flex;
   align-items: baseline;
   gap: 1.25rem;
   margin-bottom: var(--space-block);
+  padding-bottom: 1.5rem;
+}
+
+/* Ink rule under each section head — wiped in on scroll via
+   [data-reveal-clip] on .head-rule */
+.head-rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--text);
 }
 
 .section-index {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--text-small);
+  font-weight: 600;
   color: var(--accent);
   letter-spacing: 0.14em;
 }
@@ -160,18 +219,18 @@ button {
   color: var(--text-faint);
 }
 
-/* ── Buttons ──────────────────────────────────────────────────────── */
+/* ── Buttons — squared, typographic, ink-first ────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
   padding: 0.9rem 1.7rem;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--text-small);
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  border-radius: 999px;
+  border-radius: 2px;
   border: 1px solid var(--line-strong);
   transition:
     border-color var(--duration-fast) var(--ease-smooth),
@@ -182,7 +241,7 @@ button {
 
 .btn:hover {
   transform: translateY(-2px);
-  border-color: var(--accent-line);
+  border-color: var(--text);
 }
 
 .btn:active {
@@ -190,19 +249,20 @@ button {
 }
 
 .btn--primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--text);
+  border-color: var(--text);
   color: var(--bg-deep);
 }
 
 .btn--primary:hover {
-  background: #5ae8f6;
-  border-color: #5ae8f6;
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 .btn--ghost:hover {
   background: var(--accent-dim);
   color: var(--accent);
+  border-color: var(--accent-line);
 }
 
 /* ── Badges ───────────────────────────────────────────────────────── */
@@ -214,7 +274,7 @@ button {
   letter-spacing: 0.05em;
   color: var(--text-dim);
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: 2px;
   transition:
     color var(--duration-fast) var(--ease-smooth),
     border-color var(--duration-fast) var(--ease-smooth);
@@ -234,7 +294,7 @@ button {
 }
 
 .header.is-scrolled {
-  background: rgba(10, 11, 15, 0.72);
+  background: rgba(20, 16, 13, 0.85);
   backdrop-filter: blur(14px);
   border-bottom-color: var(--line);
 }
@@ -248,8 +308,8 @@ button {
 
 .logo {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.05rem;
+  font-weight: 600;
+  font-size: 1.15rem;
   letter-spacing: 0.02em;
 }
 
@@ -269,7 +329,8 @@ button {
   transition: color var(--duration-fast) var(--ease-smooth);
 }
 
-.nav a:hover {
+.nav a:hover,
+.nav a.is-active {
   color: var(--text);
 }
 
@@ -281,10 +342,10 @@ button {
 
 /* ── Footer ───────────────────────────────────────────────────────── */
 .footer {
-  /* Positioned so it paints (and clicks) above the fixed scene canvas */
   position: relative;
   border-top: 1px solid var(--line);
-  padding-block: 2.25rem;
+  /* Extra bottom padding keeps the fixed sound toggle off the text */
+  padding-block: 2.25rem 5.5rem;
 }
 
 .footer-inner {
@@ -304,6 +365,84 @@ button {
 
 .footer a:hover {
   color: var(--accent);
+}
+
+/* ── Sound toggle — quiet fixture, bottom right (bottom-left collides
+   with the About section's location caption) ─────────────────────── */
+.sound-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 8100;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.9rem;
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  transition:
+    color var(--duration-fast) var(--ease-smooth),
+    border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.sound-toggle:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+}
+
+.sound-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 0.7rem;
+}
+
+.sound-bars i {
+  width: 2px;
+  height: 30%;
+  background: currentColor;
+}
+
+.sound-bars i:nth-child(2) {
+  height: 60%;
+}
+
+.sound-bars i:nth-child(3) {
+  height: 45%;
+}
+
+.sound-toggle.is-on {
+  color: var(--accent);
+  border-color: var(--accent-line);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sound-toggle.is-on .sound-bars i {
+    animation: sound-bounce 0.9s var(--ease-smooth) infinite alternate;
+  }
+
+  .sound-toggle.is-on .sound-bars i:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .sound-toggle.is-on .sound-bars i:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+}
+
+@keyframes sound-bounce {
+  from {
+    transform: scaleY(0.6);
+  }
+  to {
+    transform: scaleY(1.4);
+  }
 }
 
 /* ── Custom cursor (pointer: fine only, added via JS) ─────────────── */

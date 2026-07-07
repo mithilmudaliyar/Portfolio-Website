@@ -22,6 +22,9 @@ const COORDINATES = [
 export default function About() {
   return (
     <section id="about" className="section" aria-labelledby="about-heading">
+      <span className="section-ghost" aria-hidden="true" data-parallax="0.18">
+        01
+      </span>
       <div className="container about-grid">
         <div className="about-aside">
           <div className="about-head">
@@ -31,6 +34,7 @@ export default function About() {
             <h2 id="about-heading" className="section-title" data-split>
               About
             </h2>
+            <span className="head-rule" aria-hidden="true" data-reveal-clip />
           </div>
           <LocationGlobe />
         </div>

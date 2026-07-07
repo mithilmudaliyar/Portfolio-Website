@@ -1,23 +1,12 @@
-/* ── Hero ─────────────────────────────────────────────────────────── */
+/* ── Hero — paper, ink, one clay full stop ────────────────────────── */
 .hero {
   position: relative;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* Translucent — the persistent scene canvas shows through */
-  background: radial-gradient(120% 90% at 70% 20%, rgba(17, 19, 24, 0.35) 0%, transparent 60%);
-  /* Pass events through empty areas so constellation nodes stay
-     hoverable; interactive content re-enables below. */
-  pointer-events: none;
 }
 
-.hero-inner,
-.hero-scroll-cue {
-  pointer-events: auto;
-}
-
-/* ── Hero content — asymmetric, editorial ─────────────────────────── */
 .hero-inner {
   position: relative;
   z-index: 1;
@@ -31,15 +20,20 @@
 
 .hero-title {
   font-size: var(--text-hero);
-  font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 0.96;
-  text-transform: uppercase;
+  font-weight: 480;
+  font-variation-settings: 'opsz' 144;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
 }
 
 .hero-title em {
   font-style: normal;
   color: var(--accent);
+}
+
+/* The surname line turns italic — the serif carries the drama */
+.hero-line--offset .hero-line-inner {
+  font-style: italic;
 }
 
 .hero-line {
@@ -53,6 +47,8 @@
 
 .hero-line-inner {
   display: inline-block;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
 }
 
 .hero-meta {
@@ -62,6 +58,8 @@
   justify-content: space-between;
   gap: 2rem;
   margin-top: clamp(2rem, 5vh, 4rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
 }
 
 .hero-tagline {
@@ -150,38 +148,6 @@
   }
 }
 
-/* ── 3D node tooltip ──────────────────────────────────────────────── */
-.node-label-wrap {
-  pointer-events: none;
-}
-
-.node-label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  padding: 0.55rem 0.85rem;
-  background: rgba(17, 19, 24, 0.88);
-  border: 1px solid var(--accent-line);
-  border-radius: 8px;
-  backdrop-filter: blur(6px);
-  white-space: nowrap;
-  transform: translateY(-1.6rem);
-}
-
-.node-label strong {
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text);
-}
-
-.node-label span {
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
 /* ── Intro overlay ────────────────────────────────────────────────── */
 .intro {
   position: fixed;
@@ -204,7 +170,7 @@
 .intro-mark {
   font-family: var(--font-display);
   font-size: clamp(2rem, 6vw, 3.5rem);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.02em;
 }
 
@@ -226,6 +192,12 @@
   height: 100%;
   background: var(--accent);
   transform: translateX(-100%);
+}
+
+.intro-count {
+  font-size: var(--text-small);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
 }
 
 .intro-skip {

@@ -74,6 +74,38 @@ export function useReveal<T extends HTMLElement>(enabled: boolean) {
         })
       })
 
+      // Parallax drift — ghost numerals (and anything else opting in via
+      // data-parallax="speed") travel against the scroll for cheap depth.
+      // Transform-only, scrubbed, disabled entirely under reduced motion.
+      gsap.utils.toArray<HTMLElement>('[data-parallax]').forEach((el) => {
+        const speed = parseFloat(el.dataset.parallax ?? '0.15')
+        gsap.fromTo(
+          el,
+          { yPercent: speed * 100 },
+          {
+            yPercent: -speed * 100,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: el.parentElement ?? el,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          },
+        )
+      })
+
+      // The hero recedes as you scroll past it — content sinks and fades
+      // slightly slower than the page, giving the exit a layer of depth.
+      if (document.querySelector('.hero-inner')) {
+        gsap.to('.hero-inner', {
+          yPercent: -14,
+          autoAlpha: 0.15,
+          ease: 'none',
+          scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+        })
+      }
+
       gsap.utils.toArray<HTMLElement>('[data-split]').forEach((el) => {
         restores.push(splitHeading(el))
         gsap.from(el.querySelectorAll('.split-char'), {

@@ -25,6 +25,9 @@ export default function Projects() {
 
   return (
     <section id="work" className="section" aria-labelledby="work-heading">
+      <span className="section-ghost" aria-hidden="true" data-parallax="0.14">
+        02
+      </span>
       <div className="container">
         <div className="section-head">
           <span className="section-index" data-reveal>
@@ -33,6 +36,7 @@ export default function Projects() {
           <h2 id="work-heading" className="section-title" data-split>
             Selected Work
           </h2>
+          <span className="head-rule" aria-hidden="true" data-reveal-clip />
         </div>
 
         <div className="filters" role="group" aria-label="Filter projects by track" data-reveal>

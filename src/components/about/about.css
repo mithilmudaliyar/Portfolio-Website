@@ -12,9 +12,11 @@
 }
 
 .about-head {
+  position: relative;
   display: flex;
   align-items: baseline;
   gap: 1.25rem;
+  padding-bottom: 1.5rem;
 }
 
 /* ── "Based in" globe instrument ──────────────────────────────────── */
@@ -41,7 +43,8 @@
 }
 
 .location-coords {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: 600;
   font-size: var(--text-micro);
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -61,7 +64,7 @@
 }
 
 .about-lede em {
-  font-style: normal;
+  font-style: italic;
   color: var(--accent);
 }
 

@@ -1,21 +1,25 @@
-/* ── Design tokens — Digital Observatory ─────────────────────────── */
+/* ── Design tokens — Ember & Ash ──────────────────────────────────── */
+/* A warm, moody dark: charcoal-espresso ground lit by a single ember.
+   Not black, not blue — warm graphite with smoke and firelight.
+   Variable names are stable across the codebase; only values change. */
 :root {
-  /* Color — one accent, everything else is atmosphere */
-  --bg-deep: #0a0b0f;
-  --bg-raised: #111318;
-  --bg-card: #14161c;
-  --line: rgba(237, 237, 239, 0.08);
-  --line-strong: rgba(237, 237, 239, 0.16);
-  --text: #ededef;
-  --text-dim: rgba(237, 237, 239, 0.64);
-  --text-faint: rgba(237, 237, 239, 0.4);
-  --accent: #35e0f2;
-  --accent-dim: rgba(53, 224, 242, 0.12);
-  --accent-line: rgba(53, 224, 242, 0.35);
+  /* Color — warm charcoal ground, ember accent, smoke text */
+  --bg-deep: #14100d;
+  --bg-raised: #1b1613;
+  --bg-card: #1f1a16;
+  --line: rgba(240, 224, 208, 0.09);
+  --line-strong: rgba(240, 224, 208, 0.2);
+  --text: #f0e4d6;
+  --text-dim: rgba(240, 228, 214, 0.64);
+  --text-faint: rgba(240, 228, 214, 0.42);
+  --accent: #e26a38;
+  --accent-soft: #f0a06a;
+  --accent-dim: rgba(226, 106, 56, 0.12);
+  --accent-line: rgba(226, 106, 56, 0.4);
 
-  /* Type — editorial display + clean grotesque */
-  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
-  --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  /* Type — characterful editorial serif + neutral grotesque */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Instrument Sans', 'Segoe UI', system-ui, sans-serif;
 
   --text-hero: clamp(3.2rem, 1rem + 11vw, 9.5rem);
   --text-h2: clamp(2.2rem, 1.2rem + 4.5vw, 4.75rem);

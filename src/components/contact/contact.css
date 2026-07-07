@@ -1,21 +1,21 @@
 /* ── Contact — the bold close ─────────────────────────────────────── */
 .contact {
-  background: radial-gradient(90% 70% at 50% 100%, rgba(53, 224, 242, 0.05) 0%, transparent 60%);
+  background: radial-gradient(90% 70% at 50% 100%, rgba(166, 60, 17, 0.05) 0%, transparent 60%);
 }
 
 .contact-headline {
   font-family: var(--font-display);
   font-size: var(--text-h2);
   font-weight: 500;
-  line-height: 1.02;
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
+  font-variation-settings: 'opsz' 144;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
   max-width: none;
   margin-bottom: 1.75rem;
 }
 
 .contact-headline em {
-  font-style: normal;
+  font-style: italic;
   color: var(--accent);
 }
 
@@ -55,15 +55,15 @@
 }
 
 .contact-copy {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--text-micro);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
   padding: 0.35rem 0.85rem;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: 2px;
   transition:
     color var(--duration-fast) var(--ease-smooth),
     border-color var(--duration-fast) var(--ease-smooth);
@@ -81,9 +81,9 @@
   left: 50%;
   z-index: 9600;
   padding: 0.7rem 1.4rem;
-  background: var(--bg-raised);
+  background: var(--bg-card);
   border: 1px solid var(--accent-line);
-  border-radius: 999px;
+  border-radius: 2px;
   font-size: var(--text-small);
   color: var(--text);
   white-space: nowrap;

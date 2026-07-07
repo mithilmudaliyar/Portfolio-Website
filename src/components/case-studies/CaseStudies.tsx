@@ -141,6 +141,9 @@ export default function CaseStudies() {
       className="section"
       aria-labelledby="case-studies-heading"
     >
+      <span className="section-ghost" aria-hidden="true" data-parallax="0.12">
+        03
+      </span>
       <div className="container">
         <div className="section-head">
           <span className="section-index" data-reveal>
@@ -149,6 +152,7 @@ export default function CaseStudies() {
           <h2 id="case-studies-heading" className="section-title" data-split>
             Case Studies
           </h2>
+          <span className="head-rule" aria-hidden="true" data-reveal-clip />
         </div>
 
         <div className="studies">

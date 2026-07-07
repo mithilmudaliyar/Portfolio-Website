@@ -9,8 +9,8 @@ import type { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from
  * globe with real dotted continents. Changes from the vendored original:
  * - land GeoJSON self-hosted in public/ instead of the live GitHub URL
  * - restyled from #000/#fff/#999 defaults to site tokens (translucent
- *   space-charcoal ocean, cyan + dim-white land/dots), sized to container
- * - pulsing cyan Mumbai marker, with a hemisphere check for raw points
+ *   paper ocean, ink land/dots, clay accent), sized to container
+ * - pulsing clay Mumbai marker, with a hemisphere check for raw points
  *   (clipAngle only clips path rendering, not projection() calls)
  * - auto-rotation runs only while visible and not reduced-motion; the
  *   vendored press-and-hold drag (mousedown -> document mousemove/mouseup)
@@ -19,7 +19,7 @@ import type { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from
  *   dpr capped at 1.5; all listeners cleaned up on unmount
  */
 
-const ACCENT = '#35e0f2'
+const ACCENT = '#a63c11'
 const MARKER_LAT = 19.076 // Mumbai
 const MARKER_LON = 72.8777
 const AUTO_ROTATE_SPEED = 0.09 // degrees per timer tick
@@ -122,37 +122,37 @@ export default function GlobeScene({ active, animate }: GlobeSceneProps) {
       const currentScale = projection.scale()
       const scaleFactor = currentScale / radius
 
-      // Ocean — translucent space charcoal so the page shows through
+      // Ocean — translucent raised paper so the page shows through
       context.beginPath()
       context.arc(width / 2, height / 2, currentScale, 0, 2 * Math.PI)
-      context.fillStyle = 'rgba(12, 14, 18, 0.55)'
+      context.fillStyle = 'rgba(236, 230, 216, 0.5)'
       context.fill()
-      context.strokeStyle = 'rgba(53, 224, 242, 0.3)'
+      context.strokeStyle = 'rgba(28, 24, 16, 0.3)'
       context.lineWidth = 1.25 * scaleFactor
       context.stroke()
 
       if (landFeatures) {
-        // Graticule — very faint dim-white
+        // Graticule — very faint ink
         context.beginPath()
         path(graticule)
-        context.strokeStyle = '#ededef'
+        context.strokeStyle = '#1c1810'
         context.lineWidth = 1 * scaleFactor
-        context.globalAlpha = 0.07
+        context.globalAlpha = 0.08
         context.stroke()
         context.globalAlpha = 1
 
-        // Land outlines — dim white
+        // Land outlines — ink
         context.beginPath()
         for (const feature of landFeatures.features) path(feature)
-        context.strokeStyle = 'rgba(237, 237, 239, 0.38)'
+        context.strokeStyle = 'rgba(28, 24, 16, 0.42)'
         context.lineWidth = 1 * scaleFactor
         context.stroke()
 
         // Visible-hemisphere centre for raw point projections
         const center: [number, number] = [-rotation[0], -rotation[1]]
 
-        // Halftone dots — cyan
-        context.fillStyle = 'rgba(53, 224, 242, 0.5)'
+        // Halftone dots — ink
+        context.fillStyle = 'rgba(28, 24, 16, 0.45)'
         for (const dot of allDots) {
           if (geoDistance([dot.lng, dot.lat], center) > Math.PI / 2) continue
           const projected = projection([dot.lng, dot.lat])
@@ -169,14 +169,14 @@ export default function GlobeScene({ active, animate }: GlobeSceneProps) {
           }
         }
 
-        // Mumbai marker — pulsing cyan dot + halo
+        // Mumbai marker — pulsing clay dot + halo
         if (geoDistance([MARKER_LON, MARKER_LAT], center) < Math.PI / 2) {
           const projected = projection([MARKER_LON, MARKER_LAT])
           if (projected) {
             const pulse = animateRef.current ? 1 + 0.3 * Math.sin(pulsePhase) : 1
             context.beginPath()
             context.arc(projected[0], projected[1], 9 * scaleFactor * pulse, 0, 2 * Math.PI)
-            context.fillStyle = 'rgba(53, 224, 242, 0.16)'
+            context.fillStyle = 'rgba(166, 60, 17, 0.18)'
             context.fill()
             context.beginPath()
             context.arc(projected[0], projected[1], 3.2 * scaleFactor, 0, 2 * Math.PI)

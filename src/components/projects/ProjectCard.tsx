@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { TRACK_LABELS, type Project } from '../../lib/projects'
-import { useTilt } from '../../hooks/useTilt'
 
 interface ProjectCardProps {
   project: Project
@@ -8,24 +7,12 @@ interface ProjectCardProps {
 }
 
 /**
- * Each project gets a deterministic hue pair inside the site's cool band
- * (teal → violet) so the gradient placeholders feel per-project but never
- * leave the visual language.
+ * Catalogue-entry card: oversized serial numeral, serif name, hairline
+ * rules. All decoration is typographic — no gradients, no imagery.
  */
-function projectHues(id: string): [number, number] {
-  let hash = 0
-  for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) | 0
-  const base = 175 + (Math.abs(hash) % 105) // 175–280
-  return [base, 175 + (Math.abs(hash >> 7) % 105)]
-}
-
 export default function ProjectCard({ project, order }: ProjectCardProps) {
-  const tilt = useTilt<HTMLLIElement>()
-  const [hueA, hueB] = projectHues(project.id)
-
   return (
     <motion.li
-      ref={tilt}
       layout
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -33,23 +20,7 @@ export default function ProjectCard({ project, order }: ProjectCardProps) {
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className="project-card"
       id={`project-${project.id}`}
-      style={
-        {
-          '--hue-a': hueA,
-          '--hue-b': hueB,
-        } as React.CSSProperties
-      }
     >
-      {/* Animated gradient visual — per-project hues, transform-only drift */}
-      <div className="project-visual" aria-hidden="true">
-        <span className="project-visual-blob project-visual-blob--a" />
-        <span className="project-visual-blob project-visual-blob--b" />
-        <span className="project-visual-grid" />
-      </div>
-
-      {/* Cursor spotlight overlay */}
-      <span className="project-spotlight" aria-hidden="true" />
-
       <span className="project-num" aria-hidden="true">
         {String(order + 1).padStart(2, '0')}
       </span>
