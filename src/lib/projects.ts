@@ -60,6 +60,30 @@ export const projects: Project[] = [
     github: `${GH}/fire-smoke-life-test-gemini`,
   },
   {
+    id: 'csi-sense',
+    name: 'CSI-Sense',
+    track: 'ai-ml',
+    year: '2026',
+    tagline: 'Seeing people through walls — with WiFi, not cameras.',
+    problem: 'Camera-based presence and fall detection raises privacy concerns and needs line of sight.',
+    outcome:
+      'A WiFi Channel State Information pipeline on ESP32 hardware that detects presence, falls and people count with dedicated ML classifiers and a Streamlit dashboard — no cameras or wearables.',
+    stack: ['Python', 'PyTorch', 'Scikit-learn', 'Streamlit', 'ESP32'],
+    github: `${GH}/CSI-Sense`,
+  },
+  {
+    id: 'human-fire-smoke-detection',
+    name: 'Human Fire & Smoke Detection',
+    track: 'ai-ml',
+    year: '2026',
+    tagline: 'Spotting people trapped inside a fire in real time.',
+    problem: 'During a fire, knowing whether a person is actually inside the danger zone is a life-safety-critical, time-sensitive judgment call.',
+    outcome:
+      'A custom-trained YOLO11 model that detects fire, smoke and people in a live video feed and fires an evacuation alert — on-screen, logged and emailed — the moment a person overlaps an active flame.',
+    stack: ['Python', 'YOLO11', 'Tkinter', 'MySQL'],
+    github: `${GH}/Human-fire-and-smoke-detection`,
+  },
+  {
     id: 'musify',
     name: 'Musify',
     track: 'web',
@@ -94,17 +118,6 @@ export const projects: Project[] = [
       'A hand-built storefront front-end — product grids, detail views and cart flow in vanilla HTML/CSS/JS.',
     stack: ['HTML', 'CSS', 'JavaScript'],
     github: `${GH}/EComm_FashionStore_Website`,
-  },
-  {
-    id: 'plant-engineering-people',
-    name: 'Plant · Engineering · People',
-    track: 'web',
-    year: '2026',
-    tagline: 'Latest build — TypeScript, end to end.',
-    problem: 'Plant-engineering workflows scatter across tools and teams.',
-    outcome: 'An in-progress TypeScript application connecting plant engineering work and people.',
-    stack: ['TypeScript', 'React'],
-    github: `${GH}/Plant-Engineering-People`,
   },
   {
     id: 'snake-game',
