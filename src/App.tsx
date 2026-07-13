@@ -6,6 +6,7 @@ import Intro from './components/intro/Intro'
 import Hero from './components/hero/Hero'
 import About from './components/about/About'
 import Projects from './components/projects/Projects'
+import Publications from './components/publications/Publications'
 import Approach from './components/approach/Approach'
 import Marquee from './components/marquee/Marquee'
 import Contact from './components/contact/Contact'
@@ -50,6 +51,7 @@ export default function App() {
           <About />
           <Marquee items={SKILLS_TICKER} direction={1} />
           <Projects />
+          <Publications />
           <Approach />
           <Marquee items={CTA_TICKER} direction={-1} variant="accent" />
           <Contact />

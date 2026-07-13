@@ -11,6 +11,7 @@ const LINKS = [
 const SECTION_TO_LINK: Record<string, string> = {
   about: '#about',
   work: '#work',
+  publications: '#work',
   approach: '#work',
   contact: '#contact',
 }

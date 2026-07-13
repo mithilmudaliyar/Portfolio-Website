@@ -4,7 +4,7 @@ export default function Approach() {
   return (
     <section id="approach" className="glass-sec right" aria-labelledby="approach-heading">
       <div className="glass" data-reveal>
-        <div className="lab">03 / Approach</div>
+        <div className="lab">04 / Approach</div>
         <h2 id="approach-heading" data-words>
           From research to running product.
         </h2>
