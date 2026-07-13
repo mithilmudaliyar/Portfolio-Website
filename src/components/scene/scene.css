@@ -1,4 +1,4 @@
-/* ── Persistent WebGL fog layer — fixed behind every section ──────── */
+/* ── Persistent WebGL scene layer — fixed behind every section ────── */
 .scene-layer {
   position: fixed;
   inset: 0;
@@ -7,27 +7,39 @@
   background: var(--bg-deep);
 }
 
-.scene-webgl {
-  position: absolute !important;
+.scene3d {
+  position: fixed;
   inset: 0;
+  opacity: 0;
+  transition: opacity 0.9s ease 0.15s;
 }
 
-/* Static warm-fog stand-in — CSS-only, for no-WebGL / reduced-motion /
-   pre-mount. Layered radial embers over charcoal, no animation. */
+.scene3d.on {
+  opacity: 1;
+}
+
+/* Static stand-in — CSS-only, for no-WebGL / reduced-motion / pre-mount. */
 .scene-fallback {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(60% 50% at 72% 30%, rgba(226, 106, 56, 0.16), transparent 70%),
-    radial-gradient(50% 55% at 20% 78%, rgba(120, 40, 28, 0.22), transparent 72%),
-    radial-gradient(80% 70% at 50% 50%, rgba(31, 24, 20, 0.9), var(--bg-deep) 80%);
+    radial-gradient(55% 45% at 70% 30%, rgba(92, 140, 255, 0.14), transparent 70%),
+    radial-gradient(50% 55% at 20% 78%, rgba(92, 140, 255, 0.08), transparent 72%),
+    radial-gradient(80% 70% at 50% 50%, rgba(10, 11, 16, 0.9), var(--bg-deep) 80%);
 }
 
-/* Vignette + top scrim so headings stay AA-readable over the fog */
+/* Legibility guard: ink shadow between the object and the hero type,
+   fades once you scroll past the hero. */
+.scene-ink-shadow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(52% 46% at 32% 48%, rgba(7, 7, 9, 0.62), transparent 68%);
+}
+
+/* Vignette so headings stay AA-readable over the object */
 .scene-scrim {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(to bottom, rgba(20, 16, 13, 0.55), transparent 22%, transparent 78%, rgba(20, 16, 13, 0.55)),
-    radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(20, 16, 13, 0.5));
+  background: radial-gradient(120% 90% at 50% 10%, transparent 45%, rgba(7, 7, 9, 0.55) 100%);
 }

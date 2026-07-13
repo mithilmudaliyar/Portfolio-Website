@@ -40,6 +40,25 @@ function splitHeading(el: HTMLElement): () => void {
 }
 
 /**
+ * Splits a heading into per-word wrappers (`.word > i`), each starting
+ * translated 110% down so it can rise into place. Preserves the
+ * accessible name via aria-label, same restore contract as splitHeading.
+ */
+function splitWords(el: HTMLElement): () => void {
+  const text = (el.textContent ?? '').trim()
+  const original = el.innerHTML
+  el.setAttribute('aria-label', text)
+  el.innerHTML = text
+    .split(/\s+/)
+    .map((word) => `<span class="word"><i>${word}</i></span>`)
+    .join(' ')
+  return () => {
+    el.innerHTML = original
+    el.removeAttribute('aria-label')
+  }
+}
+
+/**
  * Scroll-choreographed reveals. Elements opt in with `data-reveal`
  * (rise + fade), `data-reveal-clip` (clip-path wipe) or `data-split`
  * (per-character staggered rise for headings). Compositor-friendly
@@ -114,6 +133,26 @@ export function useReveal<T extends HTMLElement>(enabled: boolean) {
           ease: 'power4.out',
           stagger: 0.035,
           scrollTrigger: { trigger: el, start: 'top 85%' },
+        })
+      })
+
+      // Word-by-word rise-in: each word sits in an overflow-hidden wrapper
+      // and translates up from below, staggered. Used by the glass-panel
+      // headings (About / Approach).
+      gsap.utils.toArray<HTMLElement>('[data-words]').forEach((el) => {
+        restores.push(splitWords(el))
+        // gsap.from (not .to): the words' rest state is visible (yPercent 0),
+        // so if the trigger is passed on refresh the animation settles visible
+        // instead of leaving the heading stuck hidden. Animating yPercent also
+        // requires the initial offset to come from gsap, not a CSS
+        // translateY(110%) — GSAP reads that as `y` px and a yPercent tween
+        // then never moves it. Mirrors the [data-split] reveal above.
+        gsap.from(el.querySelectorAll('.word i'), {
+          yPercent: 110,
+          duration: 0.8,
+          ease: 'power4.out',
+          stagger: 0.06,
+          scrollTrigger: { trigger: el, start: 'top 86%' },
         })
       })
     }, scope)

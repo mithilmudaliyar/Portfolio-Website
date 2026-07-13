@@ -1,319 +1,199 @@
-/* ── Filters — typographic tabs ───────────────────────────────────── */
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-bottom: var(--space-block);
-}
-
-.filter {
-  padding: 0.55rem 1.1rem;
-  font-size: var(--text-small);
-  font-weight: 500;
-  color: var(--text-dim);
-  border: 1px solid var(--line);
-  border-radius: 2px;
-  transition:
-    color var(--duration-fast) var(--ease-smooth),
-    border-color var(--duration-fast) var(--ease-smooth),
-    background-color var(--duration-fast) var(--ease-smooth);
-}
-
-.filter sup {
-  margin-left: 0.4rem;
-  font-size: 0.65rem;
-  color: var(--accent);
-}
-
-.filter:hover {
-  color: var(--text);
-  border-color: var(--line-strong);
-}
-
-.filter.is-active {
-  color: var(--bg-deep);
-  border-color: var(--text);
-  background: var(--text);
-}
-
-.filter.is-active sup {
-  color: var(--bg-deep);
-}
-
-/* ── Editorial project grid — varied spans, never uniform ─────────── */
-.project-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 1.25rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* Catalogue-entry card: borderless, ghost serial numeral, serif name.
-   The only frame is an ember underline that draws in on hover/focus. */
-.project-card {
+/* ── Selected Work — horizontal filmstrip pinned in vertical scroll ──── */
+.film-outer {
   position: relative;
-  grid-column: span 6;
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-  background: var(--bg-card);
+  z-index: 1;
+  height: 100vh;
   overflow: hidden;
-  transition: transform var(--duration-normal) var(--ease-out-expo);
 }
 
-.project-card::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--duration-normal) var(--ease-out-expo);
+.film-track {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  gap: 36px;
+  padding: 0 var(--gutter);
+  will-change: transform;
 }
 
-.project-card:hover::after,
-.project-card:focus-within::after {
-  transform: scaleX(1);
+.film-head {
+  flex: none;
+  width: 56vw;
+  max-width: 600px;
 }
 
-.project-card:nth-child(4n + 1) {
-  grid-column: span 7;
-}
-
-.project-card:nth-child(4n + 2) {
-  grid-column: span 5;
-}
-
-.project-card:nth-child(4n + 3) {
-  grid-column: span 5;
-}
-
-.project-card:nth-child(4n + 4) {
-  grid-column: span 7;
-}
-
-.project-card:hover {
-  transform: translateY(-4px);
-}
-
-/* Oversized ghost numeral — the card's only ornament */
-.project-num {
-  position: absolute;
-  top: -0.15em;
-  right: 0.5rem;
-  font-family: var(--font-display);
-  font-size: clamp(5rem, 9vw, 8rem);
-  font-weight: 500;
-  font-variation-settings: 'opsz' 144;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(240, 224, 208, 0.16);
-  line-height: 1;
-  pointer-events: none;
-  transition: -webkit-text-stroke-color var(--duration-normal) var(--ease-smooth);
-}
-
-.project-card:hover .project-num {
-  -webkit-text-stroke-color: var(--accent-line);
-}
-
-.project-track {
-  font-size: var(--text-micro);
-  font-weight: 600;
+.film-head .lab {
+  font-family: var(--font-mono);
+  font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 0.9rem;
+  margin-bottom: 18px;
 }
 
-.project-name {
-  font-size: var(--text-h3);
-  margin-bottom: 0.4rem;
-  max-width: calc(100% - 4.5rem);
-}
-
-.project-tagline {
+.film-head h2 {
   font-family: var(--font-display);
-  font-style: italic;
-  color: var(--text);
-  margin-bottom: 1rem;
+  font-weight: 400;
+  font-size: clamp(50px, 9vw, 140px);
+  line-height: 0.85;
+  text-transform: uppercase;
+  margin: 0;
 }
 
-.project-problem,
-.project-outcome {
-  font-size: var(--text-small);
-  color: var(--text-dim);
-  margin-bottom: 0.75rem;
-}
-
-.project-outcome {
-  color: var(--text);
-}
-
-.project-stack {
+.film-card {
+  flex: none;
+  width: 400px;
+  height: 60vh;
+  padding: 32px;
+  border: 1px solid var(--line);
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  list-style: none;
-  padding: 0;
-  margin: 1.1rem 0 1.25rem;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  transition: border-color var(--duration-fast) var(--ease-smooth);
 }
 
-.project-links {
-  display: flex;
-  gap: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
-}
-
-.project-links a {
-  font-size: var(--text-small);
-  font-weight: 600;
-  color: var(--text-dim);
-  border-bottom: 1px solid transparent;
-  transition:
-    color var(--duration-fast) var(--ease-smooth),
-    border-color var(--duration-fast) var(--ease-smooth);
-}
-
-.project-links a:hover {
-  color: var(--accent);
-  border-bottom-color: var(--accent-line);
-}
-
-/* ── Responsive ───────────────────────────────────────────────────── */
-@media (max-width: 1024px) {
-  .project-card,
-  .project-card:nth-child(4n + 1),
-  .project-card:nth-child(4n + 2),
-  .project-card:nth-child(4n + 3),
-  .project-card:nth-child(4n + 4) {
-    grid-column: span 6;
-  }
-}
-
-@media (max-width: 700px) {
-  .project-card,
-  .project-card:nth-child(4n + 1),
-  .project-card:nth-child(4n + 2),
-  .project-card:nth-child(4n + 3),
-  .project-card:nth-child(4n + 4) {
-    grid-column: span 12;
-  }
-}
-
-/* ── "More projects" shelf — foundations as wide ruled cards ───────── */
-.more-projects {
-  margin-top: 2.5rem;
-}
-
-.more-toggle {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  padding: 1.1rem 1.5rem;
-  font-size: var(--text-small);
-  font-weight: 600;
-  color: var(--text-dim);
-  border: 1px dashed var(--line-strong);
-  border-radius: 2px;
-  transition:
-    color var(--duration-fast) var(--ease-smooth),
-    border-color var(--duration-fast) var(--ease-smooth),
-    background-color var(--duration-fast) var(--ease-smooth);
-}
-
-.more-toggle:hover {
-  color: var(--accent);
+.film-card:hover,
+.film-card:focus-visible {
   border-color: var(--accent-line);
-  background: var(--accent-dim);
 }
 
-.more-toggle-icon {
-  display: inline-block;
-  font-size: 1.1rem;
+.film-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.6;
+}
+
+.film-card .num {
+  font-family: var(--font-display);
+  font-size: 76px;
+  color: transparent;
+  -webkit-text-stroke: 1.4px var(--line);
   line-height: 1;
+}
+
+.film-card .tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--accent);
-  transition: transform var(--duration-normal) var(--ease-out-expo);
 }
 
-.more-toggle-icon.is-open {
-  transform: rotate(45deg);
+.film-card h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 38px;
+  text-transform: uppercase;
+  line-height: 0.92;
+  margin: 8px 0 0;
+  color: var(--text);
 }
 
-.more-toggle-meta {
-  margin-left: auto;
-  font-size: var(--text-micro);
-  letter-spacing: 0.16em;
+.film-card p {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-dim);
+  margin: 14px 0 0;
+  max-width: none;
+}
+
+.film-card .aff {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
+  margin-top: 16px;
 }
 
-.more-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.film-card--more {
+  border-style: dashed;
+}
+
+/* ── HUD — progress bar + index, bottom of the pinned viewport ───────── */
+.film-hud {
+  position: absolute;
+  bottom: 30px;
+  left: var(--gutter);
+  right: var(--gutter);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.film-bar {
+  flex: 1;
+  height: 2px;
+  background: rgba(242, 239, 230, 0.12);
+  border-radius: 2px;
   overflow: hidden;
 }
 
-/* Long full-width ruled entries — same underline treatment as the grid */
-.more-card {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem 2rem;
-  margin-top: 1rem;
-  padding: 1.4rem clamp(1.25rem, 3vw, 2rem);
-  background: var(--bg-card);
-}
-
-.more-card::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
+.film-bar span {
+  display: block;
+  height: 100%;
+  width: 100%;
   background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--duration-normal) var(--ease-out-expo);
 }
 
-.more-card:hover::after,
-.more-card:focus-within::after {
-  transform: scaleX(1);
+.film-idx {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text-faint);
+  white-space: nowrap;
 }
 
-.more-card-main {
-  flex: 1 1 16rem;
-  min-width: 0;
+.film-idx b {
+  color: var(--accent);
+  font-weight: 700;
 }
 
-.more-card .project-track {
-  margin-bottom: 0.35rem;
+.film-hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
 }
 
-.more-card-name {
-  font-size: 1.3rem;
-  margin-bottom: 0.2rem;
+/* ── Reduced motion — unpin, become a native horizontal scroller ─────── */
+@media (prefers-reduced-motion: reduce) {
+  .film-outer {
+    height: auto;
+  }
+
+  .film-track {
+    overflow-x: auto;
+    height: auto;
+    padding: 60px var(--gutter);
+  }
+
+  .film-hint {
+    display: none;
+  }
 }
 
-.more-card-tagline {
-  font-size: var(--text-small);
-  color: var(--text-dim);
-  margin: 0;
-}
+@media (max-width: 820px) {
+  .film-head {
+    width: 80vw;
+  }
 
-.more-card .project-stack {
-  margin: 0;
-}
-
-.more-card .project-links {
-  border-top: none;
-  padding-top: 0;
+  .film-card {
+    width: 78vw;
+  }
 }

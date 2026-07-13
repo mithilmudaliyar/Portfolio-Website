@@ -1,5 +1,11 @@
 /* ── Contact — the bold close ─────────────────────────────────────── */
 .contact {
+  /* Sit above the fixed scene layer (z-index 0), like every other section.
+     Without this the 3D object and its scrim paint over the CTAs and email
+     row, leaving them visible only on hover when the accent border/fill
+     brightens enough to show through. */
+  position: relative;
+  z-index: 1;
   background: radial-gradient(90% 70% at 50% 100%, rgba(166, 60, 17, 0.05) 0%, transparent 60%);
 }
 

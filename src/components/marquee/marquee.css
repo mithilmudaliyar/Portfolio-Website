@@ -1,0 +1,42 @@
+/* ── Marquee — infinite horizontal ticker ─────────────────────────── */
+.marquee {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 18px 0;
+  background: rgba(242, 239, 230, 0.02);
+}
+
+.marquee.accent {
+  background: var(--accent);
+}
+
+.mq-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.mq-track span {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding-right: 40px;
+  font-family: var(--font-display);
+  font-size: 38px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mq-track span::after {
+  content: '◆';
+  font-size: 14px;
+  color: var(--accent);
+}
+
+.marquee.accent .mq-track span,
+.marquee.accent .mq-track span::after {
+  color: var(--bg-deep);
+}

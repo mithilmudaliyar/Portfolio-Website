@@ -1,47 +1,68 @@
-import { useMagnetic } from '../../hooks/useMagnetic'
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
 import './hero.css'
 
 /**
- * Hero content — pure typography on paper. Text renders immediately,
- * so LCP never waits on anything.
+ * Hero — a 4-line Anton headline that mask-reveals line by line (clip-path
+ * wipe, never a fade), then the kicker and bio settle in. Text renders
+ * immediately so LCP never waits on the animation.
  */
 export default function Hero({ ready }: { ready: boolean }) {
-  const magnetPrimary = useMagnetic<HTMLAnchorElement>()
-  const magnetGhost = useMagnetic<HTMLAnchorElement>()
+  const reduced = useReducedMotion()
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (!ready || reduced || !sectionRef.current) return
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline()
+      tl.to('.hero-line:nth-child(1) .msk', { clipPath: 'inset(0 0% 0 0)', duration: 0.9, ease: 'power4.inOut' }, 0.1)
+        .to(
+          '.hero-line:nth-child(2) .msk',
+          { clipPath: 'inset(0 0% 0 0)', duration: 0.9, ease: 'power4.inOut', stagger: 0.08 },
+          0.3,
+        )
+        .to('.hero-line:nth-child(3) .msk', { clipPath: 'inset(0 0% 0 0)', duration: 0.9, ease: 'power4.inOut' }, 0.5)
+        .to(
+          '.hero-line:nth-child(4) .msk',
+          { clipPath: 'inset(0 0% 0 0)', duration: 0.9, ease: 'power4.inOut', stagger: 0.08 },
+          0.7,
+        )
+        .to('.hero-kicker', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 1.15)
+        .to('.hero-sub', { opacity: 1, duration: 0.8, ease: 'power3.out' }, 1.15)
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [ready, reduced])
 
   return (
-    <section id="hero" className={`hero ${ready ? 'is-ready' : ''}`} aria-label="Introduction">
+    <section id="hero" ref={sectionRef} className={`hero ${ready ? 'is-ready' : ''}`} aria-label="Introduction">
       <div className="container hero-inner">
-        <p className="kicker hero-kicker">Full-Stack &amp; AI/ML Developer</p>
-        <h1 className="hero-title">
+        <p className="kicker hero-kicker">Mithil Mudaliyar</p>
+        <h1 className="hero-title" aria-label="Machines that learn. Interfaces that move.">
           <span className="hero-line">
-            <span className="hero-line-inner">Mithil</span>
+            <span className="msk">Machines</span>
           </span>
-          <span className="hero-line hero-line--offset">
-            <span className="hero-line-inner">
-              Mudaliyar<em>.</em>
-            </span>
+          <span className="hero-line">
+            <span className="msk out">that</span> <span className="msk acc">learn.</span>
+          </span>
+          <span className="hero-line">
+            <span className="msk">Interfaces</span>
+          </span>
+          <span className="hero-line">
+            <span className="msk out">that</span> <span className="msk">move.</span>
           </span>
         </h1>
-        <div className="hero-meta">
-          <p className="hero-tagline">
-            I build machine-learning systems and web experiences that solve real problems —
-            from disease-detecting vision models to ad-free music streaming.
-          </p>
-          <div className="hero-ctas">
-            <a ref={magnetPrimary} className="btn btn--primary" href="#work">
-              View Work
-            </a>
-            <a ref={magnetGhost} className="btn btn--ghost" href="#contact">
-              Get in touch
-            </a>
-          </div>
-        </div>
+        <p className="hero-sub">
+          Full stack and AI/ML developer. I build machine learning systems and the interfaces
+          around them, from a vision model that flags plant disease to a music app with no ads.
+        </p>
       </div>
 
       <a className="hero-scroll-cue" href="#about" aria-label="Scroll to the about section">
         <span className="hero-scroll-line" aria-hidden="true" />
-        Scroll
+        Scroll to explore
       </a>
     </section>
   )

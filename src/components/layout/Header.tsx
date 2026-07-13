@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useMagnetic } from '../../hooks/useMagnetic'
 
 const LINKS = [
-  { href: '#work', label: 'Work', index: '01' },
-  { href: '#about', label: 'About', index: '02' },
+  { href: '#about', label: 'About', index: '01' },
+  { href: '#work', label: 'Work', index: '02' },
   { href: '#contact', label: 'Contact', index: '03' },
 ]
 
@@ -11,7 +11,7 @@ const LINKS = [
 const SECTION_TO_LINK: Record<string, string> = {
   about: '#about',
   work: '#work',
-  'case-studies': '#work',
+  approach: '#work',
   contact: '#contact',
 }
 
@@ -61,7 +61,7 @@ export default function Header() {
   return (
     <header className={`header ${scrolled ? 'is-scrolled' : ''}`}>
       <div className="container header-inner">
-        <a className="logo" href="#hero" aria-label="Mithil Mudaliyar — back to top">
+        <a className="logo" href="#hero" aria-label="Mithil Mudaliyar, back to top">
           MM<em>·</em>
         </a>
         <nav className="nav" aria-label="Main navigation">

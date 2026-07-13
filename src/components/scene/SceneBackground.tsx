@@ -1,8 +1,8 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import './scene.css'
 
-const FogScene = lazy(() => import('./FogScene'))
+const Scene3D = lazy(() => import('./Scene3D'))
 
 function supportsWebGL(): boolean {
   try {
@@ -17,10 +17,11 @@ function supportsWebGL(): boolean {
 }
 
 /**
- * Persistent flowing-ember-fog background behind the whole page.
+ * Persistent morphing wireframe object behind the whole page — the
+ * "3D + Editorial Kinetic" signature element.
  * - Mounts only after the intro is done, so it never blocks first paint.
- * - Pauses (frameloop → demand) when the tab is hidden.
- * - Under prefers-reduced-motion or no WebGL, a static warm-fog CSS layer
+ * - Pauses rendering when the tab is hidden.
+ * - Under prefers-reduced-motion or no WebGL, a static CSS gradient layer
  *   stands in — never a blank or a crash.
  */
 export default function SceneBackground({ ready }: { ready: boolean }) {
@@ -28,10 +29,25 @@ export default function SceneBackground({ ready }: { ready: boolean }) {
   const [mounted, setMounted] = useState(false)
   const [hasWebGL, setHasWebGL] = useState(true)
   const [visible, setVisible] = useState(true)
+  const inkShadowRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setHasWebGL(supportsWebGL())
   }, [])
+
+  // Ink shadow fades once you scroll past the hero — direct style writes
+  // avoid a React re-render on every scroll tick.
+  useEffect(() => {
+    if (reduced) return
+    const onScroll = () => {
+      const el = inkShadowRef.current
+      if (!el) return
+      el.style.opacity = String(Math.max(0, 1 - window.scrollY / (window.innerHeight * 0.7)))
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [reduced])
 
   useEffect(() => {
     if (ready) setMounted(true)
@@ -52,10 +68,11 @@ export default function SceneBackground({ ready }: { ready: boolean }) {
       <div className="scene-fallback" />
       {useCanvas && (
         <Suspense fallback={null}>
-          <FogScene active={visible} animate={visible} />
+          <Scene3D active={visible} />
         </Suspense>
       )}
-      {/* Scrim keeps foreground text readable over brighter fog */}
+      <div ref={inkShadowRef} className="scene-ink-shadow" />
+      {/* Scrim keeps foreground text readable over the object */}
       <div className="scene-scrim" />
     </div>
   )
