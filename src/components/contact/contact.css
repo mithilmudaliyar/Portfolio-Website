@@ -6,6 +6,11 @@
      brightens enough to show through. */
   position: relative;
   z-index: 1;
+  /* Same shell as .glass-sec — without the gutter the headline, CTAs and
+     email row sit flush against the viewport's left edge. */
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(5rem, 11vh, 8rem) var(--gutter);
   background: radial-gradient(90% 70% at 50% 100%, rgba(166, 60, 17, 0.05) 0%, transparent 60%);
 }
 
